@@ -5,13 +5,21 @@
 	span.not-available { color: #aaa; font-style: italic; }
 </style>
 
+<p><a href="<?php echo $this->getUrl('*/*/*', array('classic' => 1)) ?>"><?php echo $this->__('Classic view'); ?></a></p>
+
 <div class="grid">
 	<table class="data" cellspacing="0">
 		<thead>
 			<tr class="headings">
-				<th class="no-link"><span class="nobr"><a href="<?php echo  $this->getUrl('*/*/newWebsite') ?>"><?php echo Mage::helper('core')->__('Website Name') ?></a></span></th>
-				<th class="no-link"><span class="nobr"><a href="<?php echo  $this->getUrl('*/*/newGroup') ?>"><?php echo Mage::helper('core')->__('Store Name') ?></a></span></th>
-				<th class="no-link"><span class="nobr"><a href="<?php echo  $this->getUrl('*/*/newStore') ?>"><?php echo Mage::helper('core')->__('Store View Name') ?></a></span></th>
+				<?php if ($this->renderLinks): ?>
+					<th class="no-link"><span class="nobr"><a href="<?php echo $this->getUrl('*/*/newWebsite') ?>"><?php echo Mage::helper('core')->__('Website Name') ?></a></span></th>
+					<th class="no-link"><span class="nobr"><a href="<?php echo $this->getUrl('*/*/newGroup') ?>"><?php echo Mage::helper('core')->__('Store Name') ?></a></span></th>
+					<th class="no-link"><span class="nobr"><a href="<?php echo $this->getUrl('*/*/newStore') ?>"><?php echo Mage::helper('core')->__('Store View Name') ?></a></span></th>
+				<?php else: ?>
+				<th class="no-link"><span class="nobr"><span><?php echo Mage::helper('core')->__('Website Name') ?></span></span></th>
+				<th class="no-link"><span class="nobr"><span><?php echo Mage::helper('core')->__('Store Name') ?></span></span></th>
+				<th class="no-link"><span class="nobr"><span><?php echo Mage::helper('core')->__('Store View Name') ?></span></span></th>
+				<?php endif; ?>
 			</tr>
 		</thead>
 		<tbody>
@@ -19,7 +27,7 @@
 		<?php $printedWebsite = $printedStoreGroup = false; ?>
 		<?php foreach ($this->getTableData() as $webSiteId => $webSiteData): ?>
 
-			<?php if (!isset($webSiteData['_storeGroups'])): ?>
+			<?php if (count($webSiteData['_storeGroups']) == 0): ?>
 
 				<tr>
 					<?php if (!$printedWebsite): ?>
@@ -33,7 +41,7 @@
 			<?php else: ?>
 
 				<?php foreach ($webSiteData['_storeGroups'] as $storeGroupId => $storeGroupData): ?>
-					<?php if (!isset($storeGroupData['_stores'])): ?>
+					<?php if (count($storeGroupData['_stores']) == 0): ?>
 						<tr>
 							<?php if (!$printedWebsite): ?>
 								<td class="a-left" rowspan="<?php echo $webSiteData['_count'] ?>"><?php echo $this->renderWebsiteCell($webSiteData['_object']) ?></td>
